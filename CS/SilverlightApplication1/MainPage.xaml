@@ -1,0 +1,266 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:SilverlightApplication1" 
+    xmlns:dxp="http://schemas.devexpress.com/winfx/2008/xaml/printing" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" x:Class="SilverlightApplication1.MainPage"
+    mc:Ignorable="d"
+    d:DesignHeight="594" d:DesignWidth="1120">
+
+    <UserControl.DataContext>
+        <local:MainPageViewModel />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <dxp:DisabledCommand x:Key="disabledCommand"/>
+        <dx:ObjectToBooleanConverter x:Key="objectToBooleanConverter" Invert="False"/>
+        <DataTemplate x:Key="zoomModeItemTemplate">
+            <ContentControl>
+                <dxb:BarButtonItem Content="{Binding}" CommandParameter="{Binding}" dxp:BarItemBehavior.SendZoomToModelOnClick="{Binding Model, ElementName=documentViewer1}"/>
+            </ContentControl>
+        </DataTemplate>
+        <Style x:Key="pageNumberEditStyle" TargetType="dxe:TextEdit">
+            <Setter Property="MinWidth">
+                <Setter.Value>
+                    <System:Double>30</System:Double>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Padding">
+                <Setter.Value>
+                    <Thickness>0,-2</Thickness>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <dx:FormatStringConverter x:Key="formatStringConverter" Converter="{x:Null}" FormatString="/ {0}"/>
+        <Style x:Key="progressBarEditStyle" TargetType="dxe:ProgressBarEdit">
+            <Setter Property="MinWidth">
+                <Setter.Value>
+                    <System:Double>150</System:Double>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MinHeight">
+                <Setter.Value>
+                    <System:Double>12</System:Double>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="progressBarMarqueeTemplate">
+            <dxe:ProgressBarEdit Height="12" MinWidth="150" MinHeight="12">
+                <dxe:ProgressBarEdit.StyleSettings>
+                    <dxe:ProgressBarMarqueeStyleSettings/>
+                </dxe:ProgressBarEdit.StyleSettings>
+            </dxe:ProgressBarEdit>
+        </DataTemplate>
+    </UserControl.Resources>
+    <dxb:BarManager x:Name="barManager1" ToolbarGlyphSize="Small">
+        <dxb:BarManager.Items>
+            <dxb:BarSplitButtonItem x:Name="biPrint" Content="{dxp:PrintingStringId StringId=Print}" Command="{Binding Model.PrintCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/PrintDialog_16x16.png}" Hint="{dxp:PrintingStringId StringId=Print_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/PrintDialog_32x32.png}">
+                <dxb:BarSplitButtonItem.PopupControl>
+                    <dxb:PopupMenu>
+                        <dxb:PopupMenu.ItemLinks>
+                            <dxb:BarButtonItemLink BarItemName="biPrintSubItem"/>
+                            <dxb:BarButtonItemLink BarItemName="biPrintPdf"/>
+                        </dxb:PopupMenu.ItemLinks>
+                    </dxb:PopupMenu>
+                </dxb:BarSplitButtonItem.PopupControl>
+            </dxb:BarSplitButtonItem>
+            <dxb:BarButtonItem x:Name="biPrintSubItem" Content="{dxp:PrintingStringId StringId=Print}" Command="{Binding Model.PrintCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/PrintDialog_16x16.png}" Hint="{dxp:PrintingStringId StringId=Print_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/PrintDialog_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biPrintPdf" Content="{dxp:PrintingStringId StringId=PrintPdf}" Command="{Binding Model.PrintPdfCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/PrintPdf_16x16.png}" Hint="{dxp:PrintingStringId StringId=PrintPdf_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/PrintPdf_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biPageSetup" Content="{dxp:PrintingStringId StringId=PageSetup}" Command="{Binding Model.PageSetupCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/PageSetup_16x16.png}" Hint="{dxp:PrintingStringId StringId=PageSetup_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/PageSetup_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biScale" Content="{dxp:PrintingStringId StringId=Scaling}" Command="{Binding Model.ScaleCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Scaling_16x16.png}" Hint="{dxp:PrintingStringId StringId=Scaling_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Scaling_32x32.png}">
+                <dxb:BarButtonItem.IsVisible>
+                    <Binding ElementName="documentViewer1" Path="Model.IsScaleVisible">
+                        <Binding.FallbackValue>
+                            <System:Boolean>False</System:Boolean>
+                        </Binding.FallbackValue>
+                    </Binding>
+                </dxb:BarButtonItem.IsVisible>
+            </dxb:BarButtonItem>
+            <dxb:BarButtonItem x:Name="biShowFirstPage" Content="{dxp:PrintingStringId StringId=FirstPage}" Command="{Binding Model.FirstPageCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/First_16x16.png}" Hint="{dxp:PrintingStringId StringId=FirstPage_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/First_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biShowPrevPage" Content="{dxp:PrintingStringId StringId=PreviousPage}" Command="{Binding Model.PreviousPageCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Prev_16x16.png}" Hint="{dxp:PrintingStringId StringId=PreviousPage_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Prev_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biShowNextPage" Content="{dxp:PrintingStringId StringId=NextPage}" Command="{Binding Model.NextPageCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Next_16x16.png}" Hint="{dxp:PrintingStringId StringId=NextPage_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Next_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biShowLastPage" Content="{dxp:PrintingStringId StringId=LastPage}" Command="{Binding Model.LastPageCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Last_16x16.png}" Hint="{dxp:PrintingStringId StringId=LastPage_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Last_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biZoomOut" Content="{dxp:PrintingStringId StringId=DecreaseZoom}" Command="{Binding Model.ZoomOutCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ZoomOut_16x16.png}" Hint="{dxp:PrintingStringId StringId=DecreaseZoom_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ZoomOut_32x32.png}"/>
+            <dxb:BarSubItem x:Name="biZoomMode" Content="{dxp:PrintingStringId StringId=Zoom}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Zoom_16x16.png}" Hint="{dxp:PrintingStringId StringId=Zoom_Hint}" ItemTemplate="{StaticResource zoomModeItemTemplate}" ItemLinksSource="{Binding Model.ZoomModes, ElementName=documentViewer1}" IsEnabled="{Binding Model, Converter={StaticResource objectToBooleanConverter}, ElementName=documentViewer1}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Zoom_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biZoomIn" Content="{dxp:PrintingStringId StringId=IncreaseZoom}" Command="{Binding Model.ZoomInCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ZoomIn_16x16.png}" Hint="{dxp:PrintingStringId StringId=IncreaseZoom_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ZoomIn_32x32.png}"/>
+            <dxb:BarSplitButtonItem x:Name="biExportFile" Content="{dxp:PrintingStringId StringId=ExportFile}" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Export_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportFile_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Export_32x32.png}">
+                <dxb:BarSplitButtonItem.PopupControl>
+                    <dxb:PopupMenu>
+                        <dxb:PopupMenu.ItemLinks>
+                            <dxb:BarButtonItemLink BarItemName="biExportPdf"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportHtm"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportMht"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportRtf"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportXls"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportXlsx"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportCsv"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportTxt"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportGraphic"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportXps"/>
+                        </dxb:PopupMenu.ItemLinks>
+                    </dxb:PopupMenu>
+                </dxb:BarSplitButtonItem.PopupControl>
+            </dxb:BarSplitButtonItem>
+            <dxb:BarButtonItem x:Name="biExportPdf" Content="{dxp:PrintingStringId StringId=ExportPdf}" CommandParameter="Pdf" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToPDF_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportPdf}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToPDF_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportHtm" Content="{dxp:PrintingStringId StringId=ExportHtm}" CommandParameter="Htm" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToHTML_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportHtm}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToHTML_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportMht" Content="{dxp:PrintingStringId StringId=ExportMht}" CommandParameter="Mht" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToMHT_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportMht}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToMHT_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportRtf" Content="{dxp:PrintingStringId StringId=ExportRtf}" CommandParameter="Rtf" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToRTF_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportRtf}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToRTF_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportXls" Content="{dxp:PrintingStringId StringId=ExportXls}" CommandParameter="Xls" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXLS_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportXls}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXLS_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportXlsx" Content="{dxp:PrintingStringId StringId=ExportXlsx}" CommandParameter="Xlsx" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXLSX_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportXlsx}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXLSX_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportCsv" Content="{dxp:PrintingStringId StringId=ExportCsv}" CommandParameter="Csv" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToCSV_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportCsv}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToCSV_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportTxt" Content="{dxp:PrintingStringId StringId=ExportTxt}" CommandParameter="Txt" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToText_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportTxt}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToText_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportGraphic" Content="{dxp:PrintingStringId StringId=ExportImage}" CommandParameter="Image" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToImage_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportImage}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToImage_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportXps" Content="{dxp:PrintingStringId StringId=ExportXps}" CommandParameter="Xps" Command="{Binding Model.ExportCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXPS_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportXps}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXPS_32x32.png}"/>
+            <dxb:BarSplitButtonItem x:Name="biExportFileToWindow" Content="{dxp:PrintingStringId StringId=ExportFileToWindow}" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToWindow_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportFile_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToWindow_32x32.png}">
+                <dxb:BarSplitButtonItem.PopupControl>
+                    <dxb:PopupMenu>
+                        <dxb:PopupMenu.ItemLinks>
+                            <dxb:BarButtonItemLink BarItemName="biExportPdfToWindow"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportHtmToWindow"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportMhtToWindow"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportRtfToWindow"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportXlsToWindow"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportXlsxToWindow"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportCsvToWindow"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportTxtToWindow"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportGraphicToWindow"/>
+                            <dxb:BarButtonItemLink BarItemName="biExportXpsToWindow"/>
+                        </dxb:PopupMenu.ItemLinks>
+                    </dxb:PopupMenu>
+                </dxb:BarSplitButtonItem.PopupControl>
+            </dxb:BarSplitButtonItem>
+            <dxb:BarButtonItem x:Name="biExportPdfToWindow" Content="{dxp:PrintingStringId StringId=ExportPdfToWindow}" CommandParameter="Pdf" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToPDF_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportPdf}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToPDF_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportHtmToWindow" Content="{dxp:PrintingStringId StringId=ExportHtmToWindow}" CommandParameter="Htm" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToHTML_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportHtm}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToHTML_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportMhtToWindow" Content="{dxp:PrintingStringId StringId=ExportMhtToWindow}" CommandParameter="Mht" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToMHT_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportMht}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToMHT_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportRtfToWindow" Content="{dxp:PrintingStringId StringId=ExportRtfToWindow}" CommandParameter="Rtf" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToRTF_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportRtf}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToRTF_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportXlsToWindow" Content="{dxp:PrintingStringId StringId=ExportXlsToWindow}" CommandParameter="Xls" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXLS_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportXls}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXLS_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportXlsxToWindow" Content="{dxp:PrintingStringId StringId=ExportXlsxToWindow}" CommandParameter="Xlsx" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXLSX_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportXlsx}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXLSX_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportCsvToWindow" Content="{dxp:PrintingStringId StringId=ExportCsvToWindow}" CommandParameter="Csv" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToCSV_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportCsv}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToCSV_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportTxtToWindow" Content="{dxp:PrintingStringId StringId=ExportTxtToWindow}" CommandParameter="Txt" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToText_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportTxt}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToText_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportGraphicToWindow" Content="{dxp:PrintingStringId StringId=ExportImageToWindow}" CommandParameter="Image" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToImage_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportImage}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToImage_32x32.png}"/>
+            <dxb:BarButtonItem x:Name="biExportXpsToWindow" Content="{dxp:PrintingStringId StringId=ExportXpsToWindow}" CommandParameter="Xps" Command="{Binding Model.ExportToWindowCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXPS_16x16.png}" Hint="{dxp:PrintingStringId StringId=ExportXps}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/ExportToXPS_32x32.png}"/>
+            <dxb:BarCheckItem x:Name="biParameters" Content="{dxp:PrintingStringId StringId=Parameters}" Command="{Binding Model.ToggleParametersPanelCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Parameters_16x16.png}" Hint="{dxp:PrintingStringId StringId=Parameters_Hint}" IsChecked="{Binding Model.IsParametersPanelVisible, ElementName=documentViewer1, Mode=OneWay}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Parameters_32x32.png}"/>
+            <dxb:BarCheckItem x:Name="biDocumentMap" Content="{dxp:PrintingStringId StringId=DocumentMap}" Command="{Binding Model.ToggleDocumentMapCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/DocumentMap_16x16.png}" Hint="{dxp:PrintingStringId StringId=DocumentMap_Hint}" IsChecked="{Binding Model.IsDocumentMapVisible, ElementName=documentViewer1, Mode=OneWay}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/DocumentMap_32x32.png}"/>
+            <dxb:BarCheckItem x:Name="biFind" Content="{dxp:PrintingStringId StringId=Search}" Command="{Binding Model.ToggleSearchPanelCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Find_16x16.png}" Hint="{dxp:PrintingStringId StringId=Search_Hint}" IsChecked="{Binding Model.IsSearchPanelVisible, ElementName=documentViewer1, Mode=OneWay}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Find_32x32.png}">
+                <dxb:BarCheckItem.IsVisible>
+                    <Binding ElementName="documentViewer1" Path="Model.IsSearchVisible">
+                        <Binding.FallbackValue>
+                            <System:Boolean>False</System:Boolean>
+                        </Binding.FallbackValue>
+                    </Binding>
+                </dxb:BarCheckItem.IsVisible>
+            </dxb:BarCheckItem>
+            <dxb:BarButtonItem x:Name="biWatermark" Content="{dxp:PrintingStringId StringId=Watermark}" Command="{Binding Model.WatermarkCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Watermark_16x16.png}" Hint="{dxp:PrintingStringId StringId=Watermark_Hint}" LargeGlyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Watermark_32x32.png}">
+                <dxb:BarButtonItem.IsEnabled>
+                    <Binding ElementName="documentViewer1" Path="Model.IsSetWatermarkVisible">
+                        <Binding.FallbackValue>
+                            <System:Boolean>False</System:Boolean>
+                        </Binding.FallbackValue>
+                    </Binding>
+                </dxb:BarButtonItem.IsEnabled>
+            </dxb:BarButtonItem>
+            <dxb:BarEditItem x:Name="biPageNumber" Content2="{Binding Model.PageCount, Converter={StaticResource formatStringConverter}, ElementName=documentViewer1, FallbackValue=' / 0'}" Content="{dxp:PrintingStringId StringId=GoToPage}" EditValue="{Binding Model.CurrentPageNumber, ElementName=documentViewer1, Mode=TwoWay, UpdateSourceTrigger=Explicit}" EditStyle="{StaticResource pageNumberEditStyle}" ShowScreenTip="False">
+                <dxmvvm:Interaction.Behaviors>
+                    <dxp:PageNumberBehavior FocusTarget="{Binding ElementName=documentViewer1}" RevertValue="{Binding Model.CurrentPageNumber, ElementName=documentViewer1}"/>
+                </dxmvvm:Interaction.Behaviors>
+                <dxb:BarEditItem.EditSettings>
+                    <dxe:TextEditSettings AllowNullInput="True" HorizontalContentAlignment="Center" MaskType="RegEx" Mask="\d{0,6}"/>
+                </dxb:BarEditItem.EditSettings>
+                <dxb:BarEditItem.IsEnabled>
+                    <Binding ElementName="documentViewer1" Path="Model.PageCount">
+                        <Binding.FallbackValue>
+                            <System:Boolean>False</System:Boolean>
+                        </Binding.FallbackValue>
+                    </Binding>
+                </dxb:BarEditItem.IsEnabled>
+            </dxb:BarEditItem>
+            <dxb:BarEditItem x:Name="biProgress" EditValue="{Binding Model.ProgressValue, ElementName=documentViewer1, Mode=OneWay}" EditStyle="{StaticResource progressBarEditStyle}" ShowScreenTip="False">
+                <dxb:BarEditItem.EditSettings>
+                    <dxe:ProgressBarEditSettings Maximum="{Binding Model.ProgressMaximum, ElementName=documentViewer1}" Minimum="0"/>
+                </dxb:BarEditItem.EditSettings>
+                <dxb:BarEditItem.IsVisible>
+                    <Binding ElementName="documentViewer1" Path="Model.ProgressVisibility">
+                        <Binding.FallbackValue>
+                            <System:Boolean>False</System:Boolean>
+                        </Binding.FallbackValue>
+                    </Binding>
+                </dxb:BarEditItem.IsVisible>
+            </dxb:BarEditItem>
+            <dxb:BarEditItem x:Name="biMarqueeProgress" EditTemplate="{StaticResource progressBarMarqueeTemplate}" ShowScreenTip="False">
+                <dxb:BarEditItem.IsVisible>
+                    <Binding ElementName="documentViewer1" Path="Model.ProgressMarqueeVisibility">
+                        <Binding.FallbackValue>
+                            <System:Boolean>False</System:Boolean>
+                        </Binding.FallbackValue>
+                    </Binding>
+                </dxb:BarEditItem.IsVisible>
+            </dxb:BarEditItem>
+            <dxb:BarButtonItem x:Name="biStopPageBuilding" Content="{dxp:PrintingStringId StringId=StopPageBuilding}" Command="{Binding Model.StopCommand, ElementName=documentViewer1, FallbackValue={StaticResource disabledCommand}}" Glyph="{dxp:PrintingResourceImage ResourceName=Images/BarItems/Stop_16x16.png}" IsVisible="{Binding IsEnabled, RelativeSource={RelativeSource Self}}"/>
+            <dxb:BarStaticItem x:Name="biZoomFactor" AutoSizeMode="Fill" Content="{Binding Model.ZoomDisplayText, ElementName=documentViewer1}" ContentAlignment="Right" ShowBorder="False"/>
+        </dxb:BarManager.Items>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <dxr:RibbonControl Grid.Row="0">
+                <dxr:RibbonDefaultPageCategory>
+                    <dxr:RibbonPage x:Name="pagePreview" Caption="{dxp:PrintingStringId StringId=RibbonPageCaption}">
+                        <dxr:RibbonPageGroup x:Name="grpPreviewPrint" Caption="{dxp:PrintingStringId StringId=RibbonPageGroup_Print}" ShowCaptionButton="False">
+                            <dxr:RibbonPageGroup.ItemLinks>
+                                <dxb:BarSplitButtonItemLink BarItemName="biPrint"/>
+                                <dxb:BarButtonItemLink BarItemName="biPageSetup"/>
+                                <dxb:BarButtonItemLink BarItemName="biScale"/>
+                            </dxr:RibbonPageGroup.ItemLinks>
+                        </dxr:RibbonPageGroup>
+                        <dxr:RibbonPageGroup x:Name="grpPreviewNavigation" Caption="{dxp:PrintingStringId StringId=RibbonPageGroup_Navigation}" ShowCaptionButton="False">
+                            <dxr:RibbonPageGroup.ItemLinks>
+                                <dxb:BarButtonItemLink BarItemName="biShowFirstPage"/>
+                                <dxb:BarButtonItemLink BarItemName="biShowPrevPage"/>
+                                <dxb:BarButtonItemLink BarItemName="biShowNextPage"/>
+                                <dxb:BarButtonItemLink BarItemName="biShowLastPage"/>
+                            </dxr:RibbonPageGroup.ItemLinks>
+                        </dxr:RibbonPageGroup>
+                        <dxr:RibbonPageGroup x:Name="grpPreviewZoom" Caption="{dxp:PrintingStringId StringId=RibbonPageGroup_Zoom}" ShowCaptionButton="False">
+                            <dxr:RibbonPageGroup.ItemLinks>
+                                <dxb:BarButtonItemLink BarItemName="biZoomOut"/>
+                                <dxb:BarSubItemLink BarItemName="biZoomMode"/>
+                                <dxb:BarButtonItemLink BarItemName="biZoomIn"/>
+                            </dxr:RibbonPageGroup.ItemLinks>
+                        </dxr:RibbonPageGroup>
+                        <dxr:RibbonPageGroup x:Name="grpPreviewExport" Caption="{dxp:PrintingStringId StringId=RibbonPageGroup_Export}" ShowCaptionButton="False">
+                            <dxr:RibbonPageGroup.ItemLinks>
+                                <dxb:BarSplitButtonItemLink BarItemName="biExportFile"/>
+                                <dxb:BarSplitButtonItemLink BarItemName="biExportFileToWindow"/>
+                            </dxr:RibbonPageGroup.ItemLinks>
+                        </dxr:RibbonPageGroup>
+                        <dxr:RibbonPageGroup x:Name="grpPreviewDocument" Caption="{dxp:PrintingStringId StringId=RibbonPageGroup_Document}" ShowCaptionButton="False">
+                            <dxr:RibbonPageGroup.ItemLinks>
+                                <dxb:BarCheckItemLink BarItemName="biParameters"/>
+                                <dxb:BarCheckItemLink BarItemName="biDocumentMap"/>
+                                <dxb:BarCheckItemLink BarItemName="biFind"/>
+                            </dxr:RibbonPageGroup.ItemLinks>
+                            <dxb:BarButtonItem Content="Create Document" Command="{Binding CreateDocumentCommand, Mode=OneWay}"/>
+                            <dxb:BarButtonItem Content="Clear Preview" Command="{Binding ClearDocumentCommand, Mode=OneWay}"/>
+                        </dxr:RibbonPageGroup>
+                    </dxr:RibbonPage>
+                </dxr:RibbonDefaultPageCategory>
+            </dxr:RibbonControl>
+
+            <dxp:DocumentViewer x:Name="documentViewer1" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Model="{Binding PreviewModel}"/>
+            <dxr:RibbonStatusBarControl Grid.Row="2">
+                <dxr:RibbonStatusBarControl.LeftItemLinks>
+                    <dxb:BarEditItemLink BarItemName="biPageNumber"/>
+                    <dxb:BarEditItemLink BarItemName="biProgress"/>
+                    <dxb:BarEditItemLink BarItemName="biMarqueeProgress"/>
+                    <dxb:BarButtonItemLink BarItemName="biStopPageBuilding"/>
+                </dxr:RibbonStatusBarControl.LeftItemLinks>
+                <dxr:RibbonStatusBarControl.RightItemLinks>
+                    <dxb:BarStaticItemLink BarItemName="biZoomFactor"/>
+                </dxr:RibbonStatusBarControl.RightItemLinks>
+            </dxr:RibbonStatusBarControl>
+        </Grid>
+    </dxb:BarManager>
+</UserControl>

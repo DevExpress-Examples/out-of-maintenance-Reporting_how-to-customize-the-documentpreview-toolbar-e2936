@@ -1,0 +1,11 @@
+﻿<Application xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:System="clr-namespace:System;assembly=mscorlib" 
+             x:Class="SilverlightApplication1.App"
+             >
+    <Application.Resources>
+
+        <System:String x:Key="DevExpress.Xpf.License">45-F0-48-3C-C6-FB-C3-EC-94-40-AA-73-D0-54-69-B3-00-D6-F8-89</System:String>
+
+    </Application.Resources>
+</Application>
