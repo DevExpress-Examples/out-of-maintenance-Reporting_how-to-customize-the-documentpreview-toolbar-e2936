@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="ToolbarCustomizationDemo.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxp="http://schemas.devexpress.com/winfx/2008/xaml/printing"
+    xmlns:local="clr-namespace:ToolbarCustomizationDemo">
+    
+    <UserControl.Resources>
+        <DataTemplate x:Key="toolbarCustomization">
+            <dxb:BarManagerActionContainer>
+                <dxb:RemoveBarItemAndLinkAction ItemName="exportToWindow" />
+                <dxb:BarItemLinkSeparator dxb:BarItemLinkActionBase.Target="DocumentPreviewToolBar" />
+                <dxb:BarButtonItem Name="createButton" Content="Create document" Command="{Binding Path=CreateCommand}"
+                                   Glyph="/ToolbarCustomizationDemo;component/Images/Refresh_16x16.png"
+                                   LargeGlyph="/ToolbarCustomizationDemo;component/Images/Refresh_32x32.png" />
+                <dxb:BarButtonItemLink BarItemName="createButton" dxb:BarItemLinkActionBase.Target="DocumentPreviewToolBar" />
+                <dxb:BarButtonItem Name="clearButton" Content="Clear preview"
+                                   Glyph="/ToolbarCustomizationDemo;component/Images/Cancel_16x16.png"
+                                   LargeGlyph="/ToolbarCustomizationDemo;component/Images/Cancel_32x32.png" />
+                <dxb:BarButtonItemLink BarItemName="clearButton" dxb:BarItemLinkActionBase.Target="DocumentPreviewToolBar" />
+            </dxb:BarManagerActionContainer>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <UserControl.DataContext>
+        <local:MainPageViewModel />
+    </UserControl.DataContext>
+
+    <dxp:DocumentPreview Name="preview" Model="{Binding Path=PreviewModel}"
+                         dxp:BarManagerCustomization.Template="{StaticResource toolbarCustomization}" />
+</UserControl>
