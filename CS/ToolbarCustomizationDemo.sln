@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolbarCustomizationDemo", "ToolbarCustomizationDemo\ToolbarCustomizationDemo.csproj", "{892565B9-2C0A-4C07-A51F-8EAD3ACCBFB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolbarCustomizationDemo.Web", "ToolbarCustomizationDemo.Web\ToolbarCustomizationDemo.Web.csproj", "{4F5A4CF3-7C5F-4AA7-86A9-1F46DF0DF00D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{892565B9-2C0A-4C07-A51F-8EAD3ACCBFB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{892565B9-2C0A-4C07-A51F-8EAD3ACCBFB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{892565B9-2C0A-4C07-A51F-8EAD3ACCBFB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{892565B9-2C0A-4C07-A51F-8EAD3ACCBFB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F5A4CF3-7C5F-4AA7-86A9-1F46DF0DF00D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F5A4CF3-7C5F-4AA7-86A9-1F46DF0DF00D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F5A4CF3-7C5F-4AA7-86A9-1F46DF0DF00D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F5A4CF3-7C5F-4AA7-86A9-1F46DF0DF00D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
