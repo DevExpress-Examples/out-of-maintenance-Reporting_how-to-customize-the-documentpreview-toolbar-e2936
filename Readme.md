@@ -1,3 +1,10 @@
+<!-- default file list -->
+*Files to look at*:
+
+* **[MainPage.xaml](./CS/ToolbarCustomizationDemo/MainPage.xaml) (VB: [MainPage.xaml.vb](./VB/ToolbarCustomizationDemo/MainPage.xaml.vb))**
+* [MainPage.xaml.cs](./CS/ToolbarCustomizationDemo/MainPage.xaml.cs) (VB: [MainPage.xaml.vb](./VB/ToolbarCustomizationDemo/MainPage.xaml.vb))
+* [MainPageViewModel.cs](./CS/ToolbarCustomizationDemo/MainPageViewModel.cs) (VB: [MainPageViewModel.vb](./VB/ToolbarCustomizationDemo/MainPageViewModel.vb))
+<!-- default file list end -->
 # How to customize the DocumentPreview toolbar
 
 
