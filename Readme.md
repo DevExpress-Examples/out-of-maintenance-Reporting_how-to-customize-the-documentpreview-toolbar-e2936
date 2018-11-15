@@ -1,3 +1,10 @@
+<!-- default file list -->
+*Files to look at*:
+
+* [MainPage.xaml](./CS/SilverlightApplication1/MainPage.xaml) (VB: [MainPage.xaml.vb](./VB/SilverlightApplication1/MainPage.xaml.vb))
+* [MainPage.xaml.cs](./CS/SilverlightApplication1/MainPage.xaml.cs) (VB: [MainPage.xaml.vb](./VB/SilverlightApplication1/MainPage.xaml.vb))
+* **[MainPageViewModel.cs](./CS/SilverlightApplication1/MainPageViewModel.cs) (VB: [MainPageViewModel.vb](./VB/SilverlightApplication1/MainPageViewModel.vb))**
+<!-- default file list end -->
 # How to customize the DocumentPreview toolbar
 
 
